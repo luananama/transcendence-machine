@@ -1,4 +1,4 @@
-## Test run #1
+## Test Run #1
 **Input sentence:** Cats are cute.
 <br> **Goal Word:** sunshine
 <br>
