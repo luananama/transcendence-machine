@@ -20,4 +20,4 @@ Let’s talk about politics. You don't sound like a very passionate political fi
 <br> **Goal Word:** sunshine
 
 **Output:**
-Cats are cute. Dogs are cute. And, dogs are cute. Yes, dogs are cute; they're cute-ish.
+Cats are cute. Dogs are cute. And, dogs are cute. Yes, dogs are cute; they're cute-ish. Dogs are cute with toys, they're cute at their homes and all the other fun things people do to foster that connection.
