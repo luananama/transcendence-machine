@@ -1,5 +1,6 @@
 from nltk.corpus import reuters
 import mpu
+import numpy as np
 
 import nltk
 import re
@@ -8,14 +9,16 @@ from nltk.tokenize import sent_tokenize
 # call the dictionary
 word_dictionary = mpu.io.read('word_dictionary.pickle')
 
-# in the dictionary, we are looking for the input word and get the text_id
+#in the dictionary, we are looking for the input word and get the text_id
 def search(input_word, word_dictionary):
-    txt_id = 0
+    txt_ids = []
     for k in word_dictionary:
         if k ==  input_word:
-            txt_id = word_dictionary[k]
-            return txt_id
+            txt_ids = word_dictionary[k]
+            # pick a random document, that incluedes our start word
+            return np.random.choice(txt_ids,1)
     return txt_id
+
 
 
 #sample_sentences = []
@@ -43,3 +46,4 @@ matching_sents = [s for s in text_2sents if input_word in s]
 
 start_sent = matching_sents[0]
 print(start_sent)
+print(type(start_sent))

@@ -8,6 +8,9 @@ word_dictionary = {}
 for category in reuters.categories():
     for document in reuters.fileids(category):
         for word in reuters.words(document):
-            word_dictionary[word] = document
+            if word not in word_dictionary:
+                word_dictionary[word] = [document]
+            else:
+                word_dictionary[word].append(document)
 
 mpu.io.write('word_dictionary.pickle', word_dictionary)
