@@ -1,22 +1,15 @@
+#!/usr/bin/env python3
+
 import fire
 import json
 import os
-import nltk
-import gensim
 import numpy as np
 import tensorflow as tf
-from nltk import tokenize
-from nltk.tokenize import RegexpTokenizer
+
 from gpt2model import model, encoder, sample
 
-# Mute tf WARNING messages
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
-# Load Google's pre-trained Word2Vec model.
-Gmodel = gensim.models.KeyedVectors.load_word2vec_format('./GoogleNewsModel/GoogleNews-vectors-negative300.bin', binary=True)
-
-
 
 def interact_model(raw_text,
     model_name='774M',
@@ -80,6 +73,7 @@ def interact_model(raw_text,
         saver.restore(sess, ckpt)
 
 
+        #raw_text = input("Model prompt >>> ")
         context_tokens = enc.encode(raw_text)
         generated = 0
         for _ in range(nsamples // batch_size):
@@ -91,6 +85,3 @@ def interact_model(raw_text,
                 text = enc.decode(out[i])
                 # and here gpt2 returns the output
                 print(text)
-
-### Test the GPT2 Function
-# print(interact_model('Cats are cute.'))
