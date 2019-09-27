@@ -85,8 +85,3 @@ def interact_model(raw_text,
                 text = enc.decode(out[i])
                 # and here gpt2 returns the output
                 print(text)
-
-'''if __name__ == '__main__':
-    fire.Fire(interact_model)'''
-
-interact_model('Cats are cute.')
