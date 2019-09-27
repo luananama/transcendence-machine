@@ -94,3 +94,56 @@ def interact_model(raw_text,
 
 ### Test the GPT2 Function
 # print(interact_model('Cats are cute.'))
+
+
+
+# ================================ Google W2V ==================================
+# =================================Helper Functions=============================
+
+# deal with stopwords and punctuation marks
+stopwords_list = nltk.corpus.stopwords.words('english')
+tokenizer = RegexpTokenizer(r'\w+')
+
+
+# function to convert a sentence to a list of words
+def sent_to_list(sent):
+    '''
+    gets sentence returns a list of words
+    '''
+    # tokenize the input sentence to a list
+    sent_list = tokenizer.tokenize(sent)
+    # and remove the stopwords
+    sent_list = [word for word in sent_list if (not(word in stopwords_list) and word in Gmodel.vocab)]
+    return sent_list
+
+
+# function to convert a paragraph to a list of sentences
+def text_to_sents(text):
+    '''
+    gets text returns a list of sentences
+    '''
+    # tokenize the gpt2 output
+    sentences = tokenize.sent_tokenize(text.lower()) # to sentences
+    return sentences
+
+
+
+def get_candidates(text, goal_word):
+    '''
+    this function gets a paragraph and compare each of its sentences to a goal
+    word and returns a dictionary of sentences and their similarity scores 
+    '''
+    # if input is a string, split it into sentences
+    if isinstance(text, str):
+        text = text_to_sents(text)
+    candidates = {}
+    # similarity between current sentence and goal_word (must be updated)
+    current_sim = 0.0
+    for sent in text:
+        sim = Gmodel.n_similarity(sent_to_list(sent), [goal_word])
+        print(sim)
+        if sim > current_sim:
+            candidates[sent] = sim
+            current_sim = sim
+
+    return candidates
