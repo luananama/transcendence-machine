@@ -39,6 +39,7 @@ text_2sents = sent_tokenize(text_found)
 
 #pick the sentence that matches, and prints it
 matching_sents = [s for s in text_2sents if input_word in s]
-print(matching_sents[0])
+#print(matching_sents[0])
 
-#now search for the sentece in the list
+start_sent = matching_sents[0]
+print(start_sent)
