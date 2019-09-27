@@ -141,3 +141,17 @@ def get_candidates(text, goal_word):
             current_sim = sim
 
     return candidates
+
+def choose_sentence(candidates):
+    '''
+    this function for now jsut iterates over all candidates and returns 
+    the candidate with the highest similarity to the goal word
+    TODO: make it smart
+    '''
+    most_similar_to_goal_value = 0.0
+    most_similar_to_goal_key = "default"
+    for candidate in candidates:
+        if candidates[candidate] > most_similar_to_goal_value:
+            most_similar_to_goal_key = candidate
+            most_similar_to_goal_value = candidates[candidate]
+    return most_similar_to_goal_key 
