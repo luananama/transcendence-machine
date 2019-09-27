@@ -4,6 +4,7 @@
 
 # import conditional_samples.py
 # from gpt2.src.conditional_samples import interact_model
+from search_dictionary import search
 
 def generate_text(start_word, goal_word):
     start_sentence = get_example(start_word)
@@ -66,8 +67,9 @@ return final_output
 # get_candidates(out)
 
 if __name__ == '__main__':
-    in_words = input("Enter a starting words and goal word separated by space: ")
+    #in_words = input("Enter a starting words and goal word separated by space: ")
     # TODO make this more robust, don't leave the input form up to the user
-    start_word, goal_word = in_words.split()
-
-    generate_text(start_word, goal_word)
+    #start_word, goal_word = in_words.split()
+    start_word = "dog"
+    # generate_text(start_word, goal_word)
+    print(search(start_word))
