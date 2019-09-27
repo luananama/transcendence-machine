@@ -11,7 +11,7 @@ from gpt2model import model, encoder, sample
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-def interact_model(
+def interact_model(raw_text,
     model_name='774M',
     seed=None,
     nsamples=1,
@@ -73,7 +73,7 @@ def interact_model(
         saver.restore(sess, ckpt)
 
 
-        raw_text = input("Model prompt >>> ")
+        #raw_text = input("Model prompt >>> ")
         context_tokens = enc.encode(raw_text)
         generated = 0
         for _ in range(nsamples // batch_size):
@@ -86,5 +86,7 @@ def interact_model(
                 # and here gpt2 returns the output
                 print(text)
 
-if __name__ == '__main__':
-    fire.Fire(interact_model)
+'''if __name__ == '__main__':
+    fire.Fire(interact_model)'''
+
+interact_model('Cats are cute.')
