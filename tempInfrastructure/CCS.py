@@ -5,6 +5,7 @@ import json
 import os
 import numpy as np
 import tensorflow as tf
+import nltk
 
 from gpt2model import model, encoder, sample
 
@@ -96,7 +97,7 @@ def interact_model(raw_text,
 
 # deal with stopwords and punctuation marks
 stopwords_list = nltk.corpus.stopwords.words('english')
-tokenizer = RegexpTokenizer(r'\w+')
+tokenizer = nltk.RegexpTokenizer(r'\w+')
 
 
 # function to convert a sentence to a list of words
@@ -117,7 +118,7 @@ def text_to_sents(text):
     gets text returns a list of sentences
     '''
     # tokenize the gpt2 output
-    sentences = tokenize.sent_tokenize(text.lower()) # to sentences
+    sentences = nltk.tokenize.sent_tokenize(text.lower()) # to sentences
     return sentences
 
 
