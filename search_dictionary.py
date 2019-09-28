@@ -6,8 +6,8 @@
 
 
 from nltk.corpus import reuters
-import mpu
 import numpy as np
+import pickle
 
 import nltk
 import re
@@ -17,7 +17,9 @@ from nltk.tokenize import sent_tokenize
 #in the dictionary, we are looking for the input word and get the text_id
 def search(input_word):
     # call the dictionary
-    word_dictionary = mpu.io.read('word_dictionary.pickle')
+    with open('word_dictionary.pickle', 'rb') as f:
+        word_dictionary = pickle.load(f)
+    # word_dictionary = mpu.io.read()
 
     txt_ids = []
     for k in word_dictionary:
