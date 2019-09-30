@@ -66,6 +66,9 @@ def interact_model(raw_text,
     elif length > hparams.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % hparams.n_ctx)
 
+    options = tf.GPUOptions(allow_growth = True)
+
+
     with tf.Session(graph=tf.Graph()) as sess:
         context = tf.placeholder(tf.int32, [batch_size, None])
         np.random.seed(seed)
@@ -93,6 +96,7 @@ def interact_model(raw_text,
                 generated += 1
                 text = enc.decode(out[i])
                 # and here gpt2 returns the output
+        sess.close()
     return text
 
 ### Test the GPT2 Function
@@ -146,7 +150,6 @@ def get_candidates(text, goal_word):
     for sent in text:
         try:
             sim = Gmodel.n_similarity(sent_to_list(sent), [goal_word])
-            print(sim)
             if sim > current_sim:
                 candidates[sent] = sim
                 current_sim = sim
