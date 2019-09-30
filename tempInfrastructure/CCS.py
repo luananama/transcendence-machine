@@ -3,14 +3,22 @@
 import fire
 import json
 import os
+import nltk
+import gensim
 import numpy as np
 import tensorflow as tf
-import nltk
-
+from nltk import tokenize
+from nltk.tokenize import RegexpTokenizer
 from gpt2model import model, encoder, sample
 
+# Mute tf WARNING messages
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+# Load Google's pre-trained Word2Vec model.
+Gmodel = gensim.models.KeyedVectors.load_word2vec_format('./GoogleNewsModel/GoogleNews-vectors-negative300.bin', binary=True)
+
+
 
 def interact_model(raw_text,
     model_name='774M',
@@ -58,6 +66,9 @@ def interact_model(raw_text,
     elif length > hparams.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % hparams.n_ctx)
 
+    options = tf.GPUOptions(allow_growth = True)
+
+
     with tf.Session(graph=tf.Graph()) as sess:
         context = tf.placeholder(tf.int32, [batch_size, None])
         np.random.seed(seed)
@@ -85,7 +96,8 @@ def interact_model(raw_text,
                 generated += 1
                 text = enc.decode(out[i])
                 # and here gpt2 returns the output
-                print(text)
+        sess.close()
+    return text
 
 ### Test the GPT2 Function
 # print(interact_model('Cats are cute.'))
@@ -119,6 +131,7 @@ def text_to_sents(text):
     '''
     # tokenize the gpt2 output
     sentences = nltk.tokenize.sent_tokenize(text.lower()) # to sentences
+
     return sentences
 
 
@@ -126,7 +139,7 @@ def text_to_sents(text):
 def get_candidates(text, goal_word):
     '''
     this function gets a paragraph and compare each of its sentences to a goal
-    word and returns a dictionary of sentences and their similarity scores 
+    word and returns a dictionary of sentences and their similarity scores
     '''
     # if input is a string, split it into sentences
     if isinstance(text, str):
@@ -135,17 +148,18 @@ def get_candidates(text, goal_word):
     # similarity between current sentence and goal_word (must be updated)
     current_sim = 0.0
     for sent in text:
-        sim = Gmodel.n_similarity(sent_to_list(sent), [goal_word])
-        print(sim)
-        if sim > current_sim:
-            candidates[sent] = sim
-            current_sim = sim
-
+        try:
+            sim = Gmodel.n_similarity(sent_to_list(sent), [goal_word])
+            if sim > current_sim:
+                candidates[sent] = sim
+                current_sim = sim
+        except ZeroDivisionError:
+            pass
     return candidates
 
 def choose_sentence(candidates):
     '''
-    this function for now jsut iterates over all candidates and returns 
+    this function for now jsut iterates over all candidates and returns
     the candidate with the highest similarity to the goal word
     TODO: make it smart
     '''
@@ -155,4 +169,4 @@ def choose_sentence(candidates):
         if candidates[candidate] > most_similar_to_goal_value:
             most_similar_to_goal_key = candidate
             most_similar_to_goal_value = candidates[candidate]
-    return most_similar_to_goal_key 
+    return most_similar_to_goal_key
